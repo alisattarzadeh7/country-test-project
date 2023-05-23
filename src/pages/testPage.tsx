@@ -6,7 +6,7 @@ import AnimatedPage from "~/components/AnimatedPage";
 import Typography from "@mui/material/Typography";
 import Image from "next/image";
 import serverErrorImage from "~/src/assets/images/serverError.svg"
-import styles from "./countryDetail.module.scss"
+import styles from "./country/countryDetail.module.scss"
 import Link from "next/link";
 import {motion, MotionProps} from "framer-motion"
 import React from "react";

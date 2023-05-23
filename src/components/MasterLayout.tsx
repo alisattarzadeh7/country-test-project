@@ -40,8 +40,10 @@ const MasterLayout:React.FC<IMasterLayoutProps> = ({children})=>{
                 </Grid>
             </Toolbar>
         </AppBar>
-       <Box p={4} px={6} bgcolor={theme.palette.primary[layout.mode]} className="flex-1">
-           {children}
+       <Box p={4} px={15} bgcolor={theme.palette.primary[layout.mode]} className="flex-1 flex justify-center">
+           <div className="w-full max-w-[1200px]">
+               {children}
+           </div>
        </Box>
         <Script
             src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"

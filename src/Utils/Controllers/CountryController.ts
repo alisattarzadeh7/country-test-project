@@ -8,7 +8,8 @@ export default class CountryController {
     }
 
     static async getCountryDetail(cca:string):Promise<Country[]>{
-        const res = await Http.get(`/?${cca}`)
+        const res = await Http.get(`/alpha/${cca}`)
+        console.log({countryRes:res})
         return  res.data
     }
 

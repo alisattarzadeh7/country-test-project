@@ -7,10 +7,11 @@ import SearchIcon from '@mui/icons-material/Search';
 import {useRouter} from "next/router";
 
 interface ISearchBarProps {
-    handleFilterList: (newList: Country[]) => void
+    handleFilterList: (newList: Country[]) => void;
+    reset:()=>void
 }
 
-const SearchBar: React.FC<ISearchBarProps> = ({handleFilterList}) => {
+const SearchBar: React.FC<ISearchBarProps> = ({handleFilterList,reset}) => {
     const router = useRouter()
     const countryName = router.query.countryName as string ?? null
     const [name,setName] = useState(countryName)
@@ -22,12 +23,11 @@ const SearchBar: React.FC<ISearchBarProps> = ({handleFilterList}) => {
     })
 
     useEffect(()=>{
-        if(value){
             router.replace(router.pathname,{
                 query:value ? {countryName:value} : undefined
-            },{
-                shallow:true,
             })
+        if(!value){
+            reset()
         }
     },[value])
 
