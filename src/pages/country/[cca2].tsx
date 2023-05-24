@@ -77,7 +77,7 @@ const CountryDetail: NextPage<ICountryDetailProps> = ({country}) => {
                 </Grid>
                 <Grid item xs={12} lg={7} className="xs:p-0 lg:px-20 lg:py-5" container>
                     <Grid xs={12} item py={3}><Typography color="text.primary" component="span" fontSize={30}
-                                                          fontWeight="bolder">Title</Typography></Grid>
+                                                          fontWeight="bolder">{country.name.common}</Typography></Grid>
                     <Grid item xs={12}  mt={2} lg={6}><TitleValueRow
                         value={Object.keys(country?.name?.nativeName ?? {})[0] ? country.name.nativeName?.[Object.keys(country.name.nativeName)[0] as string]?.official : ''}
                         title="native name"/></Grid>

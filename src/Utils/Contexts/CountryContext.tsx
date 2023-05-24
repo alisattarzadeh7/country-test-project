@@ -32,11 +32,14 @@ export function CountryCtxProvider({ children }:{children:ReactNode}) {
         sortBy:undefined
     })
 
+
     const handleUpdateCountriesList = (list:Country[])=>{
+        console.log({list})
+
         setCountriesList(list)
         setCountriesPart(list.slice(0,12))
     }
-
+    //
     useEffect(()=>{
         if(filters.sortBy)
         handleUpdateCountriesList(

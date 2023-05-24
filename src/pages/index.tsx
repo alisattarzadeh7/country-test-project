@@ -63,9 +63,6 @@ const Home: NextPage<IHomeProps> = ({allCountries}) => {
         return self.indexOf(item) == pos;
     })
 
-    useEffect(()=>{
-        if(allCountries) handleUpdateCountriesList(allCountries.sort((a, b) => a.name.official < b.name.official ? -1 : (a.name.official > b.name.official ? 1 : 0)))
-    },[])
 
     const handleSetFilter = useCallback(({name,value}:{name:string,value:string})=>{
         const params = new URLSearchParams(searchParams as any);
@@ -149,7 +146,7 @@ export const getStaticProps: GetStaticProps<{
     allCountries: Country[];
 }> = async () => {
     const allCountries = await CountryController.getAllCountries(qs.stringify({fields: 'name,flags,cca2,population,region,capital,region'}));
-    return {props: {allCountries}};
+    return {props: {allCountries:allCountries.sort((a, b) => a.name.official < b.name.official ? -1 : (a.name.official > b.name.official ? 1 : 0))}};
 };
 
 export default Home

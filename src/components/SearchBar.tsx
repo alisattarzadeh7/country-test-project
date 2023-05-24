@@ -19,8 +19,8 @@ interface ISearchBarProps {
 const SearchBar: React.FC<ISearchBarProps> = ({reset, initialValue, handleSetFilter}) => {
     const router = useRouter()
     const [name, setName] = useState(initialValue ?? '')
-    const [value, setValue] = useDebounce(name, 500);
-    const {countriesPart, countriesList, filters, setFilters, handleUpdateCountriesList} = useCountryContext()
+    const [value, setValue] = useDebounce(name, 400);
+    const { filters, setFilters, handleUpdateCountriesList} = useCountryContext()
     const queryClient = useQueryClient()
     const filteredByRegionCaches = queryClient.getQueryData(['countries-by-region', filters.region]) as Country[]
 
@@ -31,11 +31,14 @@ const SearchBar: React.FC<ISearchBarProps> = ({reset, initialValue, handleSetFil
 
     useEffect(() => {
         if (data) {
+
             if (filteredByRegionCaches) {
+                console.log('its here filteredByRegionCaches')
                 let list = data.filter(c => !!(filteredByRegionCaches.find(country => (country.region).toLowerCase() === (c.region).toLowerCase())))
                 handleUpdateCountriesList(list)
             } else {
                 let list = filters.region ? data.filter(item => (item.region)?.toLowerCase() === (filters.region)?.toLowerCase()) : data
+                console.log('its here',list)
                 handleUpdateCountriesList(list)
             }
             setFilters(prevState => ({...prevState, countryName: value}))
@@ -44,8 +47,10 @@ const SearchBar: React.FC<ISearchBarProps> = ({reset, initialValue, handleSetFil
 
     useEffect(() => {
         setFilters(prevState => ({...prevState, countryName: value}))
-        reset()
         handleSetFilter({name: 'countryName', value})
+        if(!value)
+            reset()
+
     }, [value])
 
 

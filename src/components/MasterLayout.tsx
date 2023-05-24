@@ -41,7 +41,7 @@ const MasterLayout:React.FC<IMasterLayoutProps> = ({children})=>{
             </Toolbar>
         </AppBar>
        <Box p={4} bgcolor={theme.palette.primary[layout.mode]} className="flex-1 xs:px-2 lg:px-15 flex justify-center">
-           <div className="w-full max-w-[1200px]">
+           <div className="w-full max-w-[1300px]">
                {children}
            </div>
        </Box>
