@@ -43,9 +43,9 @@ const SortSelect: React.FC<ISortSelectProps> = ({handleSetFilter}) => {
             displayEmpty
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={sortTypes.find(t => t.value === filters.sortBy)}
+            value={sortTypes.find(t => t.value === filters.sortBy)?.value}
             onChange={handleSort}
-            defaultValue={sortTypes[0]}
+            defaultValue={sortTypes[0].value}
 
         >
             {sortTypes.map(((option, index) => (

@@ -70,8 +70,8 @@ const CountryDetail: NextPage<ICountryDetailProps> = ({country}) => {
             </Button>
             <Grid container  mt={3}>
                 <Grid item xs={12} lg={5}>
-                    <motion.div initial={{opacity: 0, x: 100}} animate={{opacity: 1, x: 0}}
-                                transition={{delay: 0.3, type: 'tween'}} className={styles.imageContainer}>
+                    <motion.div initial={{opacity: 0, x: 100}} exit={{opacity: 0, x: 100}} animate={{opacity: 1, x: 0,transition:{delay: 0.3, type: 'tween'}}}
+                                 className={styles.imageContainer}>
                         <Image src={country.flags.svg} fill alt={country.flags.alt}/>
                     </motion.div>
                 </Grid>
