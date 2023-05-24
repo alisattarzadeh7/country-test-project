@@ -23,15 +23,16 @@ import {useQueryClient} from "react-query";
 interface IRegionSelectProps{
     list:string[],
     handleSetFilter:(query:{name:string,value:string})=>void;
+    resetCountryList: () => void,
 }
 
-const RegionSelect: React.FC<IRegionSelectProps> = ({list,handleSetFilter}) => {
+const RegionSelect: React.FC<IRegionSelectProps> = ({list,resetCountryList,handleSetFilter}) => {
     const router = useRouter()
     const regionName = router.query.region as string ?? null
     const [selectedRegion,setSelectedRegion] = useState('')
     const deferredValue = useDeferredValue(selectedRegion)
     const queryClient = useQueryClient()
-    const {countriesPart,countriesList,setFilters,filters,handleUpdateCountriesList} = useCountryContext()
+    const {setFilters,filters,handleUpdateCountriesList} = useCountryContext()
     const filteredByNameCaches = queryClient.getQueryData(['countries-by-name',filters.countryName]) as Country[]
     useCountriesByRegion(selectedRegion, {
         enabled: (!!selectedRegion && !filteredByNameCaches),
@@ -46,9 +47,14 @@ const RegionSelect: React.FC<IRegionSelectProps> = ({list,handleSetFilter}) => {
         }
     })
     const handleFilterByRegion = (e: SelectChangeEvent<string>)=>{
+
         if(filteredByNameCaches){
             let list = e.target.value ? filteredByNameCaches.filter(c=>(c.region)?.toLowerCase() === (e.target.value)?.toLowerCase()) : filteredByNameCaches;
             handleUpdateCountriesList(list)
+        }else{
+            if(!(!!(e.target.value))){
+                resetCountryList()
+            }
         }
             setSelectedRegion(e.target.value)
 
@@ -63,6 +69,7 @@ const RegionSelect: React.FC<IRegionSelectProps> = ({list,handleSetFilter}) => {
         const region = urlParams.get('region');
         if(region){
             setSelectedRegion(region)
+            handleSetFilter({name:'region',value:region})
             setFilters(prevState => ({...prevState,region}))
         }
     },[])

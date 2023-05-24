@@ -65,6 +65,7 @@ const Home: NextPage<IHomeProps> = ({allCountries}) => {
 
 
     const handleSetFilter = useCallback(({name,value}:{name:string,value:string})=>{
+        console.log({handleSetFilter:{name,value}})
         const params = new URLSearchParams(searchParams as any);
         if(!value)
             params.delete(name);
@@ -98,7 +99,7 @@ const Home: NextPage<IHomeProps> = ({allCountries}) => {
                 <Grid item xs={12} md={7} lg={7} container className="xs:justify-start md:justify-end">
                     <Grid xs={12} md={6} mt={3} item container className="xs:justify-start md:justify-end"><SortSelect handleSetFilter={handleSetFilter}  /></Grid>
                     <Grid xs={12} md={6} mt={3} item container
-                          className="xs:justify-start md:justify-end"><RegionSelect handleSetFilter={handleSetFilter} list={regionsList}/></Grid>
+                          className="xs:justify-start md:justify-end"><RegionSelect resetCountryList={resetList} handleSetFilter={handleSetFilter} list={regionsList}/></Grid>
                 </Grid>
             </Grid>
             {
