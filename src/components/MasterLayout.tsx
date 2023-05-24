@@ -22,8 +22,8 @@ const MasterLayout:React.FC<IMasterLayoutProps> = ({children})=>{
 
 
     return (<div className="w-screen h-screen flex flex-col">
-        <NextNProgress color={theme.palette.primary[layout.mode === 'light' ? 'dark' : 'light']} startPosition={0} options={{speed:1 }} />
-        <AppBar position="static" sx={{p:2,height:80}}>
+        <NextNProgress showOnShallow={true} color={theme.palette.primary[layout.mode === 'light' ? 'dark' : 'light']} startPosition={0} options={{speed:1 }} />
+        <AppBar sx={{p:2,height:80,position:'fixed'}}>
             <Toolbar variant="dense">
                 <Grid container justifyContent="space-between">
                     <Typography variant="h5" color="inherit" component="div" fontWeight="bolder">
@@ -43,7 +43,7 @@ const MasterLayout:React.FC<IMasterLayoutProps> = ({children})=>{
                 </Grid>
             </Toolbar>
         </AppBar>
-       <Box p={4} bgcolor={theme.palette.primary[layout.mode]} className="flex-1 xs:px-2 lg:px-15 flex justify-center">
+       <Box p={4} mt={10} bgcolor={theme.palette.primary[layout.mode]} className="flex-1 xs:px-2 lg:px-15 flex justify-center">
            <div className="w-full max-w-[1300px]">
                {children}
            </div>
