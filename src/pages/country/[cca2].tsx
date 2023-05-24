@@ -98,7 +98,7 @@ const CountryDetail: NextPage<ICountryDetailProps> = ({country}) => {
 
 
                                     {
-                                        country?.borders.map(border =>   <Grid item><motion.div key={border} variants={borderBtnAnimate}
+                                        country?.borders.map(border =>   <Grid item key={border}><motion.div  variants={borderBtnAnimate}
                                                                                    className="px-1">
                                             <Link href={`/country/${border}`}>
                                                 <Button sx={{
