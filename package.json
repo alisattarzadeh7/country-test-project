@@ -22,6 +22,7 @@
     "framer-motion": "^10.12.12",
     "next": "13.2.4",
     "next-safe": "^3.4.1",
+    "nextjs-progressbar": "^0.0.16",
     "postcss": "8.4.23",
     "qs": "^6.11.2",
     "react": "18.2.0",

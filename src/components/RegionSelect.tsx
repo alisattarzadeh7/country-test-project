@@ -69,8 +69,8 @@ const RegionSelect: React.FC<IRegionSelectProps> = ({list,resetCountryList,handl
         const region = urlParams.get('region');
         if(region){
             setSelectedRegion(region)
-            handleSetFilter({name:'region',value:region})
             setFilters(prevState => ({...prevState,region}))
+            handleSetFilter({name:'region',value:region})
         }
     },[])
 

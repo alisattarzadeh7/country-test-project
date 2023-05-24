@@ -6,6 +6,8 @@ import Script from "next/script";
 import {motion} from "framer-motion"
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
+import NextNProgress from 'nextjs-progressbar';
+
 interface IMasterLayoutProps{
     children:ReactNode
 }
@@ -20,6 +22,7 @@ const MasterLayout:React.FC<IMasterLayoutProps> = ({children})=>{
 
 
     return (<div className="w-screen h-screen flex flex-col">
+        <NextNProgress color={theme.palette.primary[layout.mode === 'light' ? 'dark' : 'light']} startPosition={0} options={{speed:1 }} />
         <AppBar position="static" sx={{p:2,height:80}}>
             <Toolbar variant="dense">
                 <Grid container justifyContent="space-between">

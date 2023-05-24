@@ -65,7 +65,6 @@ const Home: NextPage<IHomeProps> = ({allCountries}) => {
 
 
     const handleSetFilter = useCallback(({name,value}:{name:string,value:string})=>{
-        console.log({handleSetFilter:{name,value}})
         const params = new URLSearchParams(searchParams as any);
         if(!value)
             params.delete(name);
