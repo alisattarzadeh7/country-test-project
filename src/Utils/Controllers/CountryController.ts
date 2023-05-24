@@ -9,12 +9,15 @@ export default class CountryController {
 
     static async getCountryDetail(cca:string):Promise<Country[]>{
         const res = await Http.get(`/alpha/${cca}`)
-        console.log({countryRes:res})
         return  res.data
     }
 
     static async  getCountriesByName(name?:string):Promise<Country[]>{
        const res = await Http.get(`/name/${name}`)
+       return  res.data
+    }
+    static async  getCountriesByRegion(name?:string):Promise<Country[]>{
+       const res = await Http.get(`/region/${name}`)
        return  res.data
     }
 }

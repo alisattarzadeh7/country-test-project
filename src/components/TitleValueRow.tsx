@@ -27,8 +27,8 @@ const variantAnimate = {
 
 const TitleValueRow: React.FC<ITitleValueRowProps> = ({title, value, ...props}) => {
     return (<>
-        <motion.div key={title} variants={variantAnimate} className="bold capitalize text-sm" {...props}><Typography
-            color="text.primary" component="span">{title}:</Typography>&nbsp;<span className="opacity-50">{value}</span></motion.div>
+        <motion.div key={title} variants={variantAnimate} className="bold capitalize text-sm flex items-center" {...props}><Typography
+            color="text.primary" component="span">{title}:</Typography>&nbsp;<Typography color="text.primary" fontSize={12} className="opacity-50">{value}</Typography></motion.div>
     </>)
 }
 

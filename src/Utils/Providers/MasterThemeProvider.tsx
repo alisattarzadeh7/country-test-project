@@ -86,6 +86,22 @@ const MuiProvider: React.FC<IMuiProviderProps> = ({children}) => {
                                 border:`solid 1px ${layout.mode === 'light' ? 'rgba(203,203,203,0.31)' : 'rgba(0,0,0,0.19)'}`
                             }
                         }
+                    },
+                    MuiSelect:{
+                        styleOverrides:{
+                            select:{
+                                '& div':{
+                                    padding:0
+                                }
+                            }
+                        }
+                    },
+                    MuiPopover:{
+                        styleOverrides:{
+                            paper:{
+                                marginTop:4
+                            }
+                        }
                     }
                 }
             }),

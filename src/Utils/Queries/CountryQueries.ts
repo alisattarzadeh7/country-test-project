@@ -10,5 +10,9 @@ export const useCountriesByName = (name?:string,queryOptions?:AppQueryOptions): 
     return useQuery(['countries-by-name',name], ()=>CountryController.getCountriesByName(name),queryOptions)
 }
 
+export const useCountriesByRegion = (region?:string,queryOptions?:AppQueryOptions): UseQueryResult<Country[]> =>{
+    return useQuery(['countries-by-region',region], ()=>CountryController.getCountriesByRegion(region),queryOptions)
+}
+
 
 

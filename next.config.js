@@ -13,7 +13,7 @@ const nextConfig = {
         headers: nextSafe({ isDev,
           contentSecurityPolicy:{
             "default-src": ["'self'"],
-            "img-src": ["'self'","data:","https://flagcdn.com","https://www.google-analytics.com","https://www.googletagmanager.com"],
+            "img-src": ["'self'","data:","https://upload.wikimedia.org","https://flagcdn.com","https://www.google-analytics.com","https://www.googletagmanager.com"],
             "connect-src":["'self'","https://flagcdn.com","https://restcountries.com","https://www.google-analytics.com","https://region1.google-analytics.com"],
             "font-src": ["'self'","data:"],
             "style-src": ["'self'","'unsafe-inline'","'unsafe-eval'" ,"'strict-dynamic'"],
@@ -25,7 +25,6 @@ const nextConfig = {
             "manifest-src": "'self'",
             "media-src": "'self'",
             "object-src": "'none'",
-            "prefetch-src": "'self'",
             "script-src": ["'self'","'unsafe-inline'",'https://maps.google.com',"unsafe-eval",'https://ssl.google-analytics.com','https://www.googletagmanager.com'],
             "worker-src": "'self'",
             reportOnly: false,
@@ -39,6 +38,12 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'flagcdn.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'upload.wikimedia.org',
         port: '',
         pathname: '/**',
       },

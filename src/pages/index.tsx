@@ -1,16 +1,20 @@
-import {Grid} from "@mui/material";
+import {Grid, Tooltip} from "@mui/material";
 import {motion, useInView} from "framer-motion"
 import qs from "qs"
 import Country from "~/src/Utils/Entities/Country";
 import Link from "next/link";
 import CountryController from "~/src/Utils/Controllers/CountryController";
-import {useCallback, useEffect, useRef, useState, useTransition} from "react";
+import React, {useCallback, useEffect, useRef, useState, useTransition} from "react";
 import CountryCard from "~/components/CountryCard";
 import {GetStaticProps, NextPage} from "next";
 import SearchBar from "~/components/SearchBar";
 import RegionSelect from "~/components/RegionSelect";
 import SortSelect from "~/components/SortSelect";
 import styles from "./home.module.scss"
+import {useSearchParams} from "next/navigation";
+import {useRouter} from "next/router";
+import {ICallbackList} from "~/src/Utils/Types/global";
+import {useCountryContext} from "~/src/Utils/Contexts/CountryContext";
 
 const animationVariant = {
     hidden: {
@@ -44,58 +48,71 @@ interface IHomeProps {
     allCountries: Country[]
 }
 
+
+
 const Home: NextPage<IHomeProps> = ({allCountries}) => {
-    const [countries, setCountries] = useState<Country[]>([])
-    const [countryList, setCountryList] = useState<Country[]>(allCountries)
+    const {countriesPart,countriesList,setCountriesPart,setCountriesList,handleUpdateCountriesList} = useCountryContext()
+    const searchParams = useSearchParams()
+    const router = useRouter()
+    const countryName = searchParams.get('countryName')
     const ref = useRef(null)
     const isInView = useInView(ref)
     const [, startTransition] = useTransition();
 
-    const regionsList = allCountries.map(c=>c.region).filter(function(item, pos, self) {
+    const regionsList = allCountries.map(c => c.region).filter(function (item, pos, self) {
         return self.indexOf(item) == pos;
     })
 
+    useEffect(()=>{
+        if(allCountries) handleUpdateCountriesList(allCountries.sort((a, b) => a.name.official < b.name.official ? -1 : (a.name.official > b.name.official ? 1 : 0)))
+    },[])
+
+    const handleSetFilter = useCallback(({name,value}:{name:string,value:string})=>{
+        const params = new URLSearchParams(searchParams as any);
+        if(!value)
+            params.delete(name);
+        else params.set(name, value);
+        router.replace(params ? `${router.pathname}?${params}` : router.pathname)
+    },[searchParams])
+
+
     useEffect(() => {
-        if (isInView && countryList && countries.length !== countryList.length)
-            setCountries(prevState => [...prevState, ...countryList.slice(prevState.length, prevState.length + 12)])
+        if (isInView && countriesList && countriesPart.length !== countriesList.length)
+            setCountriesPart(prevState => [...prevState, ...countriesList.slice(prevState.length, prevState.length + 12)])
     }, [isInView])
 
 
-    const handleFilterList = useCallback((newList: Country[]) => {
-        startTransition(() => {
-            setCountryList(newList)
-            setCountries(newList.slice(0, 12))
-        })
+
+    const resetList = useCallback(() => {
+        if (allCountries.length ! >= countriesList.length)
+        {
+            handleUpdateCountriesList(allCountries)
+        }
     }, [])
 
 
-    const resetList = useCallback(()=>{
-        if(allCountries.length !>= countryList.length)
-        handleFilterList(allCountries)
-    },[])
-
     return (
         <>
-            {/*<Link href="/testPage">go to testPage</Link>*/}
+
             <Grid container justifyContent="space-between">
                 <Grid item xs={12} md={5} mt={3}>
-                    <SearchBar handleFilterList={handleFilterList} reset={resetList} />
+                    <SearchBar initialValue={countryName} handleSetFilter={handleSetFilter} reset={resetList}/>
                 </Grid>
                 <Grid item xs={12} md={7} lg={7} container className="xs:justify-start md:justify-end">
-                    <Grid xs={12} md={6} mt={3} item container className="xs:justify-start md:justify-end"><SortSelect/></Grid>
+                    <Grid xs={12} md={6} mt={3} item container className="xs:justify-start md:justify-end"><SortSelect handleSetFilter={handleSetFilter}  /></Grid>
                     <Grid xs={12} md={6} mt={3} item container
-                          className="xs:justify-start md:justify-end"><RegionSelect list={regionsList} /></Grid>
+                          className="xs:justify-start md:justify-end"><RegionSelect handleSetFilter={handleSetFilter} list={regionsList}/></Grid>
                 </Grid>
             </Grid>
             {
-                countries.length > 0 && <motion.div variants={container}
+                countriesPart.length > 0 && <motion.div variants={container}
                                                     initial="hidden"
                                                     animate="show"
                                                     className={styles.mainContainer}
                 >
                     <Grid container spacing={10}>
                         {
-                            countries?.map((country, index) => (
+                            countriesPart?.map((country, index) => (
 
                                 <Grid xs={12} md={4} lg={3} item container justifyContent="center" key={country.cca2}>
                                     <Link href={`/country/${country.cca2}`} className="w-full">
@@ -107,10 +124,14 @@ const Home: NextPage<IHomeProps> = ({allCountries}) => {
                                                     delay: Math.min(index, 12) * 0.05
                                                 }
                                             }}
-                                            whileHover={{scale:1.05}}
-                                            key={country.name.official} variants={animationVariant}
+                                            whileHover={{scale: 1.05}}
+                                            key={country.cca2} variants={animationVariant}
                                         >
-                                            <CountryCard info={country}/>
+                                            <Tooltip title={country.name.official}>
+                                                <div>
+                                                    <CountryCard info={country}/>
+                                                </div>
+                                            </Tooltip>
                                         </motion.div>
                                     </Link>
                                 </Grid>

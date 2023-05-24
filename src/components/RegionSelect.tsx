@@ -1,24 +1,71 @@
-import React, {useEffect, useState} from "react"
-import {Box, FormControl, InputAdornment, InputLabel, List, Select, SelectChangeEvent, TextField} from "@mui/material";
+import React, {useDeferredValue, useEffect, useState} from "react"
+import {
+    Box,
+    FormControl,
+    InputAdornment,
+    InputLabel,
+    List,
+    MenuItem,
+    Select,
+    SelectChangeEvent,
+    TextField
+} from "@mui/material";
 import {motion} from "framer-motion"
 import {useRouter} from "next/router";
+import {useSearchParams} from "next/navigation";
+import Country from "~/src/Utils/Entities/Country";
+import { useCountriesByRegion} from "~/src/Utils/Queries/CountryQueries";
+import {ICallbackList} from "~/src/Utils/Types/global";
+import {useCountryContext} from "~/src/Utils/Contexts/CountryContext";
+import {useQueryClient} from "react-query";
 
 
 interface IRegionSelectProps{
-    list:string[]
+    list:string[],
+    handleSetFilter:(query:{name:string,value:string})=>void;
 }
 
-const RegionSelect: React.FC<IRegionSelectProps> = ({list}) => {
-    const [open,setOpen] = useState(false)
+const RegionSelect: React.FC<IRegionSelectProps> = ({list,handleSetFilter}) => {
     const router = useRouter()
     const regionName = router.query.region as string ?? null
-    const handleFilterByRegion = (r?:string)=>{
-        console.log('this fn called')
-        router.replace(router.pathname,{
-            query:r ? {region:r} : undefined
-        })
-        setOpen(false)
+    const [selectedRegion,setSelectedRegion] = useState('')
+    const deferredValue = useDeferredValue(selectedRegion)
+    const queryClient = useQueryClient()
+    const {countriesPart,countriesList,setFilters,filters,handleUpdateCountriesList} = useCountryContext()
+    const filteredByNameCaches = queryClient.getQueryData(['countries-by-name',filters.countryName]) as Country[]
+    useCountriesByRegion(selectedRegion, {
+        enabled: (!!selectedRegion && !filteredByNameCaches),
+        onSuccess:(d:Country[])=>{
+            if(filteredByNameCaches){
+                let data = filteredByNameCaches.filter(c=>(c.region).toLowerCase() === (selectedRegion).toLowerCase())
+                handleUpdateCountriesList(data)
+            }else{
+                handleUpdateCountriesList(d)
+            }
+            setFilters(prevState=>({...prevState,region:selectedRegion}))
+        }
+    })
+    const handleFilterByRegion = (e: SelectChangeEvent<string>)=>{
+        if(filteredByNameCaches){
+            let list = e.target.value ? filteredByNameCaches.filter(c=>(c.region)?.toLowerCase() === (e.target.value)?.toLowerCase()) : filteredByNameCaches;
+            handleUpdateCountriesList(list)
+        }
+            setSelectedRegion(e.target.value)
+
+        setFilters(prevState => ({...prevState,region:e.target.value}))
+        handleSetFilter({name:'region',value:e.target.value})
     }
+
+
+
+    useEffect(()=>{
+        const urlParams = new URLSearchParams(window.location.search);
+        const region = urlParams.get('region');
+        if(region){
+            setSelectedRegion(region)
+            setFilters(prevState => ({...prevState,region}))
+        }
+    },[])
 
 
     return (  <FormControl sx={{  minWidth: 250 }}>
@@ -26,17 +73,27 @@ const RegionSelect: React.FC<IRegionSelectProps> = ({list}) => {
             role="get-by-region"
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={regionName}
-            onClick={()=>setOpen(true)}
-            open={open}
+            value={selectedRegion}
+            displayEmpty
+            onChange={handleFilterByRegion}
             placeholder="Filter by Region"
-
+            renderValue={(selected) => {
+                if (!selected) {
+                    return <>Filter by Region</>;
+                }
+                return selected;
+            }}
         >
-            <motion.div onClick={()=>handleFilterByRegion()} className="p-3 cursor-pointer" whileHover={{x:10}} initial={{opacity:0,y:10}} animate={{opacity:1,y:0}}>all</motion.div>
-            {
-                list && list.map((item,index)=><motion.div key={item} onClick={()=>handleFilterByRegion(item)} className="p-3 cursor-pointer" whileHover={{x:10}} initial={{opacity:0,y:10}} animate={{opacity:1,y:0,transition:{delay:(index + 1) * 0.04}}}>{item}</motion.div>)
-            }
-
+            <MenuItem  value={undefined}>
+                <motion.div  className="p-3 cursor-pointer" whileHover={{x:10}} initial={{opacity:0,y:10}} animate={{opacity:1,y:0}}>
+                    All
+                </motion.div>
+            </MenuItem>
+            {list &&list.map(((name,index) => (
+                <MenuItem key={name} value={name}>
+                    <motion.div  className="p-3 cursor-pointer" whileHover={{x:10}} initial={{opacity:0,y:10}} animate={{opacity:1,y:0,transition:{delay:(index + 1) * 0.04}}}>{name}</motion.div>
+                </MenuItem>
+            )))}
     </Select></FormControl>)
 }
 

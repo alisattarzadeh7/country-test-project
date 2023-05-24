@@ -27,7 +27,9 @@ const container = {
             staggerChildren: 0.05,
             type: 'tween'
         }
-    }
+    },
+    exit: {opacity: 0},
+
 };
 
 
@@ -61,41 +63,42 @@ const CountryDetail: NextPage<ICountryDetailProps> = ({country}) => {
 
         {
             country &&
-            <Box mt={2}>
+            <Box mt={2} height="fit-content">
             <Button variant="outlined" onClick={handleGetBack}
                     startIcon={<KeyboardBackspaceIcon style={{color: theme.palette.text.primary}}/>}>
                 <Typography color="text.primary" fontSize={15} component="span" className="capitalize">back</Typography>
             </Button>
-            <Grid container height={400} mt={3}>
+            <Grid container  mt={3}>
                 <Grid item xs={12} lg={5}>
                     <motion.div initial={{opacity: 0, x: 100}} animate={{opacity: 1, x: 0}}
-                                transition={{delay: 0.3, type: 'tween'}} className={styles.imageContainer}><Image
-                        src={country.flags.svg} fill alt={country.flags.alt}/></motion.div>
+                                transition={{delay: 0.3, type: 'tween'}} className={styles.imageContainer}>
+                        <Image src={country.flags.svg} fill alt={country.flags.alt}/>
+                    </motion.div>
                 </Grid>
-                <Grid item xs={12} lg={7} px={10} py={5} container>
+                <Grid item xs={12} lg={7} className="xs:p-0 lg:px-20 lg:py-5" container>
                     <Grid xs={12} item py={3}><Typography color="text.primary" component="span" fontSize={30}
                                                           fontWeight="bolder">Title</Typography></Grid>
-                    <Grid item xs={12} lg={6}><TitleValueRow
-                        value={Object.keys(country.name.nativeName)[0] ? country.name.nativeName?.[Object.keys(country.name.nativeName)[0] as string]?.official : ''}
+                    <Grid item xs={12}  mt={2} lg={6}><TitleValueRow
+                        value={Object.keys(country?.name?.nativeName ?? {})[0] ? country.name.nativeName?.[Object.keys(country.name.nativeName)[0] as string]?.official : ''}
                         title="native name"/></Grid>
-                    <Grid item xs={12} lg={6}><TitleValueRow value={country.tld?.join(', ')} title="top level domain"/></Grid>
-                    <Grid item xs={12} lg={6}><TitleValueRow value={country.population} title="population"/></Grid>
-                    <Grid item xs={12} lg={6}><TitleValueRow value={Object.keys(country.currencies).join(', ')} title="currencies"/></Grid>
-                    <Grid item xs={12} lg={6}><TitleValueRow value={country.region} title="region"/></Grid>
-                    <Grid item xs={12} lg={6}><TitleValueRow value={Object.values(country.languages).join(', ')} title="languages"/></Grid>
-                    <Grid item xs={12}><TitleValueRow value={country.subregion} title="sub region"/></Grid>
-                    <Grid item xs={12}><TitleValueRow value={country.capital?.join(', ')} title="capital"/></Grid>
+                    <Grid item xs={12}  mt={2} lg={6}><TitleValueRow value={country.tld?.join(', ')} title="top level domain"/></Grid>
+                    <Grid item xs={12}  mt={2} lg={6}><TitleValueRow value={country.population} title="population"/></Grid>
+                    <Grid item xs={12}  mt={2} lg={6}><TitleValueRow value={Object.keys(country.currencies ?? {}).join(', ')} title="currencies"/></Grid>
+                    <Grid item xs={12}  mt={2} lg={6}><TitleValueRow value={country.region} title="region"/></Grid>
+                    <Grid item xs={12}  mt={2} lg={6}><TitleValueRow value={Object.values(country.languages ?? {}).join(', ')} title="languages"/></Grid>
+                    <Grid item xs={12} mt={2} ><TitleValueRow value={country.subregion} title="sub region"/></Grid>
+                    <Grid item xs={12} mt={2} ><TitleValueRow value={country.capital?.join(', ')} title="capital"/></Grid>
                     {
                         country?.borders?.length > 0 &&
-                        <Grid item xs={12} container alignItems="center">
+                        <Grid item xs={12} container alignItems="center" mt={3} spacing={1}>
                             <Grid item>
                                 <Typography component="h1" fontSize={17} fontWeight="bold" color="text.primary">Border
                                     Countries: </Typography>
                             </Grid>
-                            <Grid item>
-                                <Grid container>
+
+
                                     {
-                                        country?.borders.map(border => <motion.div variants={borderBtnAnimate}
+                                        country?.borders.map(border =>   <Grid item><motion.div key={border} variants={borderBtnAnimate}
                                                                                    className="px-1">
                                             <Link href={`/country/${border}`}>
                                                 <Button sx={{
@@ -106,7 +109,7 @@ const CountryDetail: NextPage<ICountryDetailProps> = ({country}) => {
                                                                 className={styles.borderCountryStyle}>{border}</Typography>
                                                 </Button>
                                             </Link>
-                                        </motion.div>)
+                                        </motion.div>   </Grid>)
                                     }
 
                                     {/*<motion.div variants={borderBtnAnimate} className="px-1">*/}
@@ -129,9 +132,8 @@ const CountryDetail: NextPage<ICountryDetailProps> = ({country}) => {
                                     {/*        </Button>*/}
                                     {/*    </Link>*/}
                                     {/*</motion.div>*/}
-                                </Grid>
 
-                            </Grid>
+
 
                         </Grid>
                     }

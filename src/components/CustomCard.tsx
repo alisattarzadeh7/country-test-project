@@ -23,9 +23,9 @@ const CustomCard: React.FC<ICustomCardProps> = ({image, title, children, ...prop
                 </div>
             }
             <CardContent>
-                <Box mt={1} mb={2}>
+                <Box mt={1} mb={2} className="overflow-ellipsis overflow-hidden">
                     {
-                        title && <Typography gutterBottom variant="h6" component="span" fontWeight="bold">
+                        title && <Typography gutterBottom variant="h6" component="span" whiteSpace="nowrap" fontWeight="bold">
                             {title}
                         </Typography>
                     }
