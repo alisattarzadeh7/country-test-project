@@ -1,7 +1,7 @@
 
 # Country project
 
-This repo is made for interview test of AliBaba company
+This repo is made for interview test of AliBaba's company
 
 
 
@@ -25,3 +25,7 @@ To run the project you can use `npm run dev` for development envirement and for 
 ## Appendix
 
 The project is already able to be Dockerized by runnig `docker build -t nextjs-docker .`
+
+## Note
+
+the restcountries api sometimes is not working with IP of Iran, so for having better experience, using vpn or shecan (to change DNS) is recommanded 
